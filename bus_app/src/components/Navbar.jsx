@@ -29,9 +29,9 @@ function Navbar() {
             </header>
             <section>
                 <div className="container">
-                    <div className="content">
+                    {/*<div className="content">
                         <h2>Responsive shit</h2>
-                    </div>
+                    </div>*/}
                 </div>
             </section>
         </>
