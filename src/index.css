@@ -50,6 +50,14 @@ header {
   cursor: pointer;
 }
 
+.container nav .logo a:hover {
+  color: #4F3B32;
+}
+
+.container nav .logo a:visited {
+  color: #4F3B32;
+}
+
 .container .nav-link {
   display: flex;
 }
@@ -80,12 +88,20 @@ header {
   top: 20%;
   left: 50%;
   transform: translate(-50%, 0%);
+  width: 90%;
+  max-width: 1200px;
 }
 
 .content h2 {
   font-size: 6rem;
   color: #4F3B32;
 }
+
+.content h3 {
+  font-size: 3rem;
+  color: #4F3B32;
+}
+
 
 .icon {
   font-size: 1.5rem;
@@ -117,5 +133,75 @@ header {
   .nav-link.active {
     top: 10%;
     transition: all 0.3s ease;
+  }
+}
+
+.bus-stop-container {
+  margin: 2rem auto;
+  max-width: 100%;
+}
+
+.bus-stop {
+  margin-bottom: 1rem;
+}
+
+.bus-stop:last-child {
+  margin-bottom: 0;
+}
+
+.stop-header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #9D9580;
+  border: none;
+  border-radius: 6px;
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.stop-header.open{
+  border-radius: 6px 6px 0 0;
+}
+
+.stop-header:hover {
+  background: #8F8673;
+}
+
+.stop-header h4 {
+  margin: 0;
+  padding: 0;
+  color: #4F3B32;
+  font-size: 1.5rem;
+  border: none;
+}
+
+.times-list {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 0.5rem;
+  margin-top: 0;
+  padding: 0.5rem 0.5rem 0.5rem 0.5rem;
+  border-radius: 0 0 6px 6px;
+  background: #B4ADA5;
+}
+
+.times-list li {
+  background: #f5f4f2;
+  padding: 0.5rem;
+  border-radius: 4px;
+  text-align: center;
+  color: #4F3B32;
+  font-weight: 500;
+  font-size: 1.2rem;
+}
+
+@media (max-width: 768px) {
+  .bus-stop-container {
+    max-width: 100%;
+    padding: 0 1rem;
   }
 }

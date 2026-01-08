@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import { FaBars } from "react-icons/fa6";
 
 function Navbar() {
@@ -14,12 +15,14 @@ function Navbar() {
                 <div className="container">
                     <nav>
                         <div className="logo">
-                            <h2>TapestryBus</h2>
+                            <Link to="/"> 
+                                <h2>TapestryBus</h2>
+                            </Link>
                         </div>
                         <ul className={isOpen ? "nav-link active" : "nav-link"}>
-                            <li><a href="/Bus">Bus</a></li> {/*className="active"*/}
-                            <li><a href="/Weather">Weather</a></li>
-                            <li><a href="/About">About</a></li>
+                            <li><Link to="/bus" onClick={() => setIsOpen(false)}>Bus</Link></li> {/*className="active"*/}
+                            <li><Link to="/weather" onClick={() => setIsOpen(false)}>Weather</Link></li>
+                            <li><Link to="/about" onClick={() => setIsOpen(false)}>About</Link></li>
                         </ul>
                         <div className="icon" onClick={toggleMenu}>
                             <FaBars />
@@ -27,13 +30,13 @@ function Navbar() {
                     </nav>
                 </div>
             </header>
-            <section>
+            {/*<section>
                 <div className="container">
-                    {/*<div className="content">
+                    <div className="content">
                         <h2>Responsive shit</h2>
-                    </div>*/}
+                    </div>
                 </div>
-            </section>
+            </section>*/}
         </>
     );   
 }  
