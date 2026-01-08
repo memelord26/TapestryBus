@@ -53,12 +53,28 @@ function Bus() {
             ] 
         }
     };
+    //show which timetable
     const currentSchedule = busSchedule[typeOfDay];
     const toggleStop = (stopName) => {
-        setOpenStops(prev => ({
-            ...prev,
-            [stopName]: !prev[stopName]
-        }));
+        setOpenStops(prev => {
+            if (prev[stopName]) {
+                return { [stopName]: false };
+            }
+            return { [stopName]: true };
+        })
+    }
+    //convert time to string to mins since midnight
+    const timeToMins = (timeStr) => {
+        const timeOnly = timeStr.split(" ")[0].split("(")[0].trim();
+        const [hours, minutes] = timeOnly.split(":").map(Number);
+        return hours * 60 + minutes;
+    }
+    //sort times with upcoming buses first
+    const sortTimes = (times) => {
+        const currentMins = currentTime.getHours() * 60 + currentTime.getMinutes();
+        const upcoming = times.filter(time => timeToMins(time) >= currentMins);
+        const passed = times.filter(time => timeToMins(time) < currentMins);
+        return [...upcoming, ...passed];
     }
 
     //public holidays
@@ -69,21 +85,24 @@ function Bus() {
                 <h2 align="center">{showTime}</h2>
                 <h3 align="center">{typeOfDay}</h3>
                 <div className="bus-stop-container">
-                    {Object.entries(currentSchedule).map(([stopName, times]) => (
-                        <div key={stopName} className="bus-stop">
-                            <button className={`stop-header ${openStops[stopName] ? 'open' : ''}`} onClick={() => toggleStop(stopName)}>
-                                <h4>{stopName}</h4>
-                                {openStops[stopName] ? <ChevronDown size={40} /> : <ChevronRight size={40} />}
-                            </button>
-                            {openStops[stopName] && (
-                                <ul className="times-list">
-                                    {times.map((time, index) => (
-                                        <li key={index}>{time}</li>
-                                    ))}
-                                </ul>
-                            )}
-                        </div>
-                    ))}
+                    {Object.entries(currentSchedule).map(([stopName, times]) => {
+                        const sortedTimes = sortTimes(times);
+                        return (
+                            <div key={stopName} className="bus-stop">
+                                <button className={`stop-header ${openStops[stopName] ? 'open' : ''}`} onClick={() => toggleStop(stopName)}>
+                                    <h4>{stopName}</h4>
+                                    {openStops[stopName] ? <ChevronDown size={40} /> : <ChevronRight size={40} />}
+                                </button>
+                                {openStops[stopName] && (
+                                    <ul className="times-list">
+                                        {sortedTimes.map((time, index) => (
+                                            <li key={index}>{time}</li>
+                                        ))}
+                                    </ul>
+                                )}
+                            </div>
+                        )
+                    })}
                 </div>
             </div>
         </>

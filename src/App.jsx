@@ -7,7 +7,7 @@ import About from "./components/About.jsx";
 
 function App() {
   return (
-    <Router>
+    <Router basename="/TapestryBus">
       <div>
         <Navbar />
         <Routes>
