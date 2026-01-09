@@ -20,7 +20,7 @@ function Bus() {
     //bus schedule
     const busSchedule = {
         Weekday: { 
-            "Tapestry Condo": ["6:30", "6:45", "6:45", "7:00", "7:15", "7:15", "7:30", "7:45", "8:00", "8:15", "8:15", "8:30", "8:45", "9:00", "9:15", "9:15", "9:30", "9:45", "10:00 (Dropoff only)",
+            "Tapestry Condo": ["6:30", "6:45", "6:45", "7:00", "7:15", "7:15", "7:30", "7:45", "8:00", "8:15", "8:15", "8:30", "8:45", "9:00", "9:15", "9:15", "9:30", "10:00 (Dropoff only)",
                 "11:30", "12:00", "12:30", "13:00", "13:30", "14:00", "14:30 (Dropoff only)",
                 "17:00", "17:20", "17:40", "18:00", "18:20", "18:40", "19:00", "19:20", "19:40", "20:00", "20:20", "20:50", "21:15 (Dropoff only)"
             ], 
@@ -48,7 +48,7 @@ function Bus() {
                 "17:53", "18:23", "18:53", "19:23", "19:53", "20:23", "20:53"
             ],
             "Tampines MRT - Exit B": ["8:10", "8:40", "9:10", "9:40", "10:10",
-                "11:10", "11:40", "12:10", "12:40", "13:10", "13:40", "14:10", "14:40", "14:55", "15:25", "15:40", "15:55 (Dropoff only)", "16:10", "16:40 (Dropoff only",
+                "11:10", "11:40", "12:10", "12:40", "13:10", "13:40", "14:10", "14:40", "14:55", "15:25", "15:40", "15:55 (Dropoff only)", "16:10", "16:40 (Dropoff only)",
                 "17:55", "18:25", "18:55", "19:25", "19:55", "20:25", "20:55"
             ] 
         }
@@ -68,6 +68,19 @@ function Bus() {
         const timeOnly = timeStr.split(" ")[0].split("(")[0].trim();
         const [hours, minutes] = timeOnly.split(":").map(Number);
         return hours * 60 + minutes;
+    }
+    //calculate mins till arrival
+    const getMinsUntil = (timeStr) => {
+        const busMins = timeToMins(timeStr);
+        const currentMins = currentTime.getHours() * 60 + currentTime.getMinutes();
+        let diff = busMins - currentMins;
+        if (diff < 0) {
+            return "Left";
+        } else if (diff === 0) {
+            return "Arr";
+        } else {
+            return `${diff} mins`;
+        }
     }
     //sort times with upcoming buses first
     const sortTimes = (times) => {
@@ -96,7 +109,10 @@ function Bus() {
                                 {openStops[stopName] && (
                                     <ul className="times-list">
                                         {sortedTimes.map((time, index) => (
-                                            <li key={index}>{time}</li>
+                                            <li className={`times-li ${getMinsUntil(time) === "Left" ? 'left' : ''}`} key={index}>
+                                                <span className="time-text">{time}</span>
+                                                <span className="time-countdown">{getMinsUntil(time)}</span>
+                                            </li>
                                         ))}
                                     </ul>
                                 )}

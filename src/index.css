@@ -180,23 +180,38 @@ header {
 
 .times-list {
   list-style: none;
-  display: grid;
-  grid-template-columns: repeat(1, 1fr);
+  padding: 0.75rem 0.5rem 0.5rem 0.5rem;
+  display: flex;
+  flex-direction: column;
   gap: 0.5rem;
   margin-top: 0;
-  padding: 0.5rem 0.5rem 0.5rem 0.5rem;
   border-radius: 0 0 6px 6px;
   background: #B4ADA5;
 }
 
-.times-list li {
+.times-li {
   background: #f5f4f2;
-  padding: 0.5rem;
+  padding: 0.75rem 1rem;
   border-radius: 4px;
-  text-align: center;
   color: #4F3B32;
   font-weight: 500;
-  font-size: 1.2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.times-li.left {
+  background: #deddd9;
+}
+
+.time-text {
+  text-align: left;
+}
+
+.time-countdown {
+  text-align: right;
+  font-weight: 600;
+  color: #4F3B32;
 }
 
 @media (max-width: 768px) {

@@ -15,12 +15,12 @@ function Navbar() {
                 <div className="container">
                     <nav>
                         <div className="logo">
-                            <Link to="/"> 
+                            <Link to="/about"> 
                                 <h2>TapestryBus</h2>
                             </Link>
                         </div>
                         <ul className={isOpen ? "nav-link active" : "nav-link"}>
-                            <li><Link to="/bus" onClick={() => setIsOpen(false)}>Bus</Link></li> {/*className="active"*/}
+                            <li><Link to="/" onClick={() => setIsOpen(false)}>Bus</Link></li> {/*className="active"*/}
                             <li><Link to="/weather" onClick={() => setIsOpen(false)}>Weather</Link></li>
                             <li><Link to="/about" onClick={() => setIsOpen(false)}>About</Link></li>
                         </ul>
