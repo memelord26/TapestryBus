@@ -5,17 +5,41 @@ function Bus() {
     //current time in 24hrs
     const [currentTime, setCurrentTime] = useState(new Date());
     const [openStops, setOpenStops] = useState({});
+    //public holidays
+    const [isHoliday, setIsHoliday] = useState(false);
     useEffect(() => {
+        //update current time every second
         const timer = setInterval(() => {
             setCurrentTime(new Date());
         }, 1000);
+
+        //public holiday
+        const today = new Date();
+        const todaystr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+        const publicHolidays2026 = [
+            "2026-01-01",
+            "2026-02-17",
+            "2026-02-18",
+            "2026-03-21",
+            "2026-04-03",
+            "2026-05-01",
+            "2026-05-27",
+            "2026-05-31",
+            "2026-08-09",
+            "2026-11-08",
+            "2026-12-25",
+        ];
+        setIsHoliday(publicHolidays2026.includes(todaystr));
+        console.log("Today is holiday:", todaystr, 'IsHoliday:', publicHolidays2026.includes(todaystr));
         return () => clearInterval(timer);
     }, []);
     const showTime = currentTime.getHours().toString().padStart(2, '0') + ":" + currentTime.getMinutes().toString().padStart(2, '0');
 
     //day of the week
     const dayOfWeek = currentTime.getDay();
-    const typeOfDay = (dayOfWeek === 0 || dayOfWeek === 6) ? "Weekend" : "Weekday";
+    const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
+    const actualDayType = isWeekend ? "Weekend" : "Weekday";
+    const scheduleType = (isWeekend || isHoliday) ? "Weekend" : "Weekday";
 
     //bus schedule
     const busSchedule = {
@@ -54,7 +78,7 @@ function Bus() {
         }
     };
     //show which timetable
-    const currentSchedule = busSchedule[typeOfDay];
+    const currentSchedule = busSchedule[scheduleType];
     const toggleStop = (stopName) => {
         setOpenStops(prev => {
             if (prev[stopName]) {
@@ -89,14 +113,12 @@ function Bus() {
         const passed = times.filter(time => timeToMins(time) < currentMins);
         return [...upcoming, ...passed];
     }
-
-    //public holidays
     
     return(
         <>
             <div className="content">
                 <h2 align="center">{showTime}</h2>
-                <h3 align="center">{typeOfDay}</h3>
+                <h3 align="center">{actualDayType}{isHoliday && ' (Public Holiday)'}</h3>
                 <div className="bus-stop-container">
                     {Object.entries(currentSchedule).map(([stopName, times]) => {
                         const sortedTimes = sortTimes(times);
