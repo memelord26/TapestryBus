@@ -93,6 +93,11 @@ header {
   text-align: center;
 }
 
+.content h1 {
+  font-size: 4rem;
+  color: #4F3B32;
+}
+
 .content h2 {
   font-size: 6rem;
   color: #4F3B32;
