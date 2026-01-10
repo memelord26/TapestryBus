@@ -183,16 +183,22 @@ header {
   border-radius: 6px 6px 0 0;
 }
 
-.stop-header:hover {
-  background: #8F8673;
-}
-
 .stop-header h4 {
   margin: 0;
   padding: 0;
   color: #4F3B32;
   font-size: 1.5rem;
   border: none;
+}
+
+.stop-header svg {
+  color: #4F3B32;
+  stroke: #4F3B32;
+}
+
+.stop-header:hover svg {
+  color: #4F3B32;
+  stroke: #4F3B32;
 }
 
 .times-list {
