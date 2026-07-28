@@ -1,4 +1,6 @@
 import { supabase } from "./supabaseClient";
+import React, { useState, useEffect } from "react";
+import { ChevronRight, ChevronDown } from "lucide-react";
 
 function Bus() {
   const [currentTime, setCurrentTime] = useState(new Date());
@@ -42,12 +44,13 @@ function Bus() {
   }, [holidays]);
 
   const dayOfWeek = currentTime.getDay();
-  const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
-  const scheduleType = (isWeekend || isHoliday) ? "Weekend" : "Weekday";
-  const currentSchedule = scheduleData[scheduleType] || {};
-  
-    //show which timetable
-    const currentSchedule = busSchedule[scheduleType];
+    const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
+    const actualDayType = isWeekend ? "Weekend" : "Weekday";
+    const scheduleType = (isWeekend || isHoliday) ? "Weekend" : "Weekday";
+    const currentSchedule = scheduleData[scheduleType] || {};
+
+    const showTime = currentTime.getHours().toString().padStart(2, '0') + ":" + currentTime.getMinutes().toString().padStart(2, '0');
+
     const toggleStop = (stopName) => {
         setOpenStops(prev => {
             if (prev[stopName]) {
@@ -56,6 +59,7 @@ function Bus() {
             return { [stopName]: true };
         })
     }
+
     //convert time to string to mins since midnight
     const timeToMins = (timeStr) => {
         const timeOnly = timeStr.split(" ")[0].split("(")[0].trim();
