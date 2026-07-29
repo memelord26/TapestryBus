@@ -29,6 +29,8 @@ header {
   background: #B4ADA5;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
   padding: 2rem 0;
+  position: relative;
+  z-index: 20;
 }
 
 .container {
@@ -144,11 +146,11 @@ header {
     height: 60vh;
     top: -800px;
     right: 0;
-    z-index: 10;
+    z-index: 5;
   }
 
   .nav-link.active {
-    top: 10%;
+    top: 15%;
     transition: all 0.3s ease;
   }
 }
@@ -189,6 +191,7 @@ header {
   color: #4F3B32;
   font-size: 1.5rem;
   border: none;
+  text-align: left;
 }
 
 .stop-header svg {
