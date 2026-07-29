@@ -29,8 +29,6 @@ header {
   background: #B4ADA5;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
   padding: 2rem 0;
-  position: relative;
-  z-index: 20;
 }
 
 .container {
@@ -50,6 +48,8 @@ header {
   color: #4F3B32;
   font-size: 1.2rem;
   cursor: pointer;
+  position: relative;
+  z-index: 30;
 }
 
 .container nav .logo a:hover {
@@ -126,6 +126,8 @@ header {
   font-size: 1.5rem;
   cursor: pointer;
   display: none;
+  position: relative;
+  z-index: 30;
 }
 
 @media(max-width: 768px) {
