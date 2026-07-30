@@ -126,7 +126,7 @@ function Bus() {
                 <h2 align="center">{showTime}</h2>
                 <h3 align="center">{actualDayType}{isHoliday && ' (Public Holiday)'}</h3>
                 <div className="bus-stop-container">
-                    {sortedStopEntires.map(([stopName, times]) => {
+                    {sortedStopEntries.map(([stopName, times]) => {
                         const sortedTimes = sortTimes(times);
                         return (
                             <div key={stopName} className="bus-stop">
@@ -142,7 +142,7 @@ function Bus() {
                                                 <li key={service.ServiceNo} className="times-li">
                                                     <span className="time-text">Bus {service.ServiceNo}</span>
                                                     <span className="time-countdown">
-                                                    {Math.max(0, Math.round((new Date(service.NextBus.EstimatedArrival) - new Date()) / 60000))} mins,{" | "}
+                                                    {Math.max(0, Math.round((new Date(service.NextBus.EstimatedArrival) - new Date()) / 60000))} mins{" | "}
                                                     {Math.max(0, Math.round((new Date(service.NextBus2.EstimatedArrival) - new Date()) / 60000))} mins
                                                     </span>
                                                 </li>
