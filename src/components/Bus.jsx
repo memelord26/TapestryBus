@@ -10,6 +10,8 @@ function Bus() {
   const [holidays, setHolidays] = useState([]);
   const [liveTimings, setLiveTimings] = useState({});
 
+  const TARGET_SERVICE = "298";
+
   useEffect(() => {
     async function fetchData() {
       const { data: timings, error: timingsError } = await supabase
@@ -99,7 +101,8 @@ function Bus() {
     const fetchLiveArrival = async (stopName, busStopCode) => {
         const res = await fetch(`/.netlify/functions/busArrival?busStopCode=${busStopCode}`);
         const data = await res.json();
-        setLiveTimings(prev => ({ ...prev, [stopName]: data.Services }));
+        const filtered = data.Services?.filter(service => service.ServiceNo === TARGET_SERVICE) || [];
+        setLiveTimings(prev => ({ ...prev, [stopName]: filtered }));
     };
     
     return(
@@ -121,12 +124,13 @@ function Bus() {
                                         {liveStops[stopName] ? (
                                         liveTimings[stopName]?.length > 0 ? (
                                             liveTimings[stopName].map(service => (
-                                            <li key={service.ServiceNo} className="times-li">
-                                                <span className="time-text">Bus {service.ServiceNo}</span>
-                                                <span className="time-countdown">
-                                                {Math.max(0, Math.round((new Date(service.NextBus.EstimatedArrival) - new Date()) / 60000))} mins
-                                                </span>
-                                            </li>
+                                                <li key={service.ServiceNo} className="times-li">
+                                                    <span className="time-text">Bus {service.ServiceNo}</span>
+                                                    <span className="time-countdown">
+                                                    {Math.max(0, Math.round((new Date(service.NextBus.EstimatedArrival) - new Date()) / 60000))} mins,{" "}
+                                                    {Math.max(0, Math.round((new Date(service.NextBus2.EstimatedArrival) - new Date()) / 60000))} mins
+                                                    </span>
+                                                </li>
                                             ))
                                         ) : (
                                             <li className="times-li">No buses currently running</li>
