@@ -147,10 +147,10 @@ header {
     background-color: #B4ADA5;
     position: absolute;
     width: 350px;
-    height: 60vh;
     top: -800px;
     right: 0;
     z-index: 5;
+    padding: 1rem 0 1.5rem 0;
   }
 
   .nav-link.active {
