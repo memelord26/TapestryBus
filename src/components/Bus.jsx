@@ -60,9 +60,7 @@ function Bus() {
         "Tampines West - Exit A",
         "OTH",
         "Tampines MRT - Exit B",
-        "Blk 875B",
-        "Opp Tampines Stn/Int",
-        "Blk 945"
+        "298"
     ];
 
     const sortedStopEntries = Object.entries(currentSchedule).sort(
@@ -70,17 +68,19 @@ function Bus() {
     );
 
     //live bus code num
-    const liveStops = {
-        "Blk 875B": "75041",
-        "Opp Tampines Stn/Int": "76149",
-        "Blk 945": "76111",
+    const liveGroups = {
+    "298": {
+            "Blk 875B": "75041",
+            "Opp Tampines Stn/Int": "76149",
+            "Blk 945": "76111"
+        }
     };
 
     const toggleStop = (stopName) => {
-        setOpenStops(prev => {
+    setOpenStops(prev => {
             const isOpening = !prev[stopName];
-            if (isOpening && liveStops[stopName]) {
-            fetchLiveArrival(stopName, liveStops[stopName]);
+            if (isOpening && liveGroups[stopName]) {
+                fetchGroupArrivals(stopName);
             }
             return isOpening ? { [stopName]: true } : { [stopName]: false };
         });
@@ -119,6 +119,12 @@ function Bus() {
         const filtered = data.Services?.filter(service => service.ServiceNo === TARGET_SERVICE) || [];
         setLiveTimings(prev => ({ ...prev, [stopName]: filtered }));
     };
+    const fetchGroupArrivals = async (groupName) => {
+        const subStops = liveGroups[groupName];
+        await Promise.all(
+            Object.entries(subStops).map(([subStopName, code]) => fetchLiveArrival(subStopName, code))
+        );
+    };
     
     return(
         <>
@@ -136,20 +142,25 @@ function Bus() {
                                 </button>
                                 {openStops[stopName] && (
                                     <ul className="times-list">
-                                        {liveStops[stopName] ? (
-                                        liveTimings[stopName]?.length > 0 ? (
-                                            liveTimings[stopName].map(service => (
-                                                <li key={service.ServiceNo} className="times-li">
-                                                    <span className="time-text">Bus {service.ServiceNo}</span>
-                                                    <span className="time-countdown">
-                                                    {Math.max(0, Math.round((new Date(service.NextBus.EstimatedArrival) - new Date()) / 60000))} mins{" | "}
-                                                    {Math.max(0, Math.round((new Date(service.NextBus2.EstimatedArrival) - new Date()) / 60000))} mins
-                                                    </span>
-                                                </li>
-                                            ))
-                                        ) : (
-                                            <li className="times-li">No buses currently running</li>
-                                        )
+                                        {liveGroups[stopName] ? (
+                                        Object.keys(liveGroups[stopName]).map(subStopName => {
+                                            const times = liveTimings[subStopName];
+                                            return (
+                                            <li key={subStopName} className="times-li">
+                                                <span className="time-text">{subStopName}</span>
+                                                <span className="time-countdown">
+                                                {times?.length > 0 ? (
+                                                    <>
+                                                    {Math.max(0, Math.round((new Date(times[0].NextBus.EstimatedArrival) - new Date()) / 60000))} mins{" | "}
+                                                    {Math.max(0, Math.round((new Date(times[0].NextBus2.EstimatedArrival) - new Date()) / 60000))} mins
+                                                    </>
+                                                ) : (
+                                                    "No buses"
+                                                )}
+                                                </span>
+                                            </li>
+                                            );
+                                        })
                                         ) : (
                                         sortedTimes.map((time, index) => (
                                             <li className={`times-li ${getMinsUntil(time) === "Left" ? 'left' : ''}`} key={index}>
