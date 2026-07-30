@@ -54,6 +54,21 @@ function Bus() {
 
     const showTime = currentTime.getHours().toString().padStart(2, '0') + ":" + currentTime.getMinutes().toString().padStart(2, '0');
 
+    //bus stops order
+    const stopOrder = [
+        "Tapestry Condo",
+        "Tampines West - Exit A",
+        "OTH",
+        "Tampines MRT - Exit B",
+        "Blk 875B",
+        "Opp Tampines Stn/Int",
+        "Blk 945"
+    ];
+
+    const sortedStopEntries = Object.entries(currentSchedule).sort(
+        ([a], [b]) => stopOrder.indexOf(a) - stopOrder.indexOf(b)
+    );
+
     //live bus code num
     const liveStops = {
         "Blk 875B": "75041",
@@ -111,7 +126,7 @@ function Bus() {
                 <h2 align="center">{showTime}</h2>
                 <h3 align="center">{actualDayType}{isHoliday && ' (Public Holiday)'}</h3>
                 <div className="bus-stop-container">
-                    {Object.entries(currentSchedule).map(([stopName, times]) => {
+                    {sortedStopEntires.map(([stopName, times]) => {
                         const sortedTimes = sortTimes(times);
                         return (
                             <div key={stopName} className="bus-stop">
@@ -127,7 +142,7 @@ function Bus() {
                                                 <li key={service.ServiceNo} className="times-li">
                                                     <span className="time-text">Bus {service.ServiceNo}</span>
                                                     <span className="time-countdown">
-                                                    {Math.max(0, Math.round((new Date(service.NextBus.EstimatedArrival) - new Date()) / 60000))} mins,{" "}
+                                                    {Math.max(0, Math.round((new Date(service.NextBus.EstimatedArrival) - new Date()) / 60000))} mins,{" | "}
                                                     {Math.max(0, Math.round((new Date(service.NextBus2.EstimatedArrival) - new Date()) / 60000))} mins
                                                     </span>
                                                 </li>
