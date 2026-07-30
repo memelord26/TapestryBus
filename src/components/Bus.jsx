@@ -8,6 +8,7 @@ function Bus() {
   const [isHoliday, setIsHoliday] = useState(false);
   const [scheduleData, setScheduleData] = useState({});
   const [holidays, setHolidays] = useState([]);
+  const [liveTimings, setLiveTimings] = useState({});
 
   useEffect(() => {
     async function fetchData() {
@@ -51,14 +52,22 @@ function Bus() {
 
     const showTime = currentTime.getHours().toString().padStart(2, '0') + ":" + currentTime.getMinutes().toString().padStart(2, '0');
 
+    //live bus code num
+    const liveStops = {
+        "Blk 875B": "75041",
+        "Opp Tampines Stn/Int": "76149",
+        "Blk 945": "76111",
+    };
+
     const toggleStop = (stopName) => {
         setOpenStops(prev => {
-            if (prev[stopName]) {
-                return { [stopName]: false };
+            const isOpening = !prev[stopName];
+            if (isOpening && liveStops[stopName]) {
+            fetchLiveArrival(stopName, liveStops[stopName]);
             }
-            return { [stopName]: true };
-        })
-    }
+            return isOpening ? { [stopName]: true } : { [stopName]: false };
+        });
+    };
 
     //convert time to string to mins since midnight
     const timeToMins = (timeStr) => {
@@ -86,6 +95,12 @@ function Bus() {
         const passed = times.filter(time => timeToMins(time) < currentMins);
         return [...upcoming, ...passed];
     }
+    //live bus timings
+    const fetchLiveArrival = async (stopName, busStopCode) => {
+        const res = await fetch(`/.netlify/functions/busArrival?busStopCode=${busStopCode}`);
+        const data = await res.json();
+        setLiveTimings(prev => ({ ...prev, [stopName]: data.Services }));
+    };
     
     return(
         <>
@@ -103,12 +118,27 @@ function Bus() {
                                 </button>
                                 {openStops[stopName] && (
                                     <ul className="times-list">
-                                        {sortedTimes.map((time, index) => (
-                                            <li className={`times-li ${getMinsUntil(time) === "Left" ? 'left' : ''}`} key={index}>
-                                                <span className="time-text">{time}</span>
-                                                <span className="time-countdown">{getMinsUntil(time)}</span>
+                                        {liveStops[stopName] ? (
+                                        liveTimings[stopName]?.length > 0 ? (
+                                            liveTimings[stopName].map(service => (
+                                            <li key={service.ServiceNo} className="times-li">
+                                                <span className="time-text">Bus {service.ServiceNo}</span>
+                                                <span className="time-countdown">
+                                                {Math.max(0, Math.round((new Date(service.NextBus.EstimatedArrival) - new Date()) / 60000))} mins
+                                                </span>
                                             </li>
-                                        ))}
+                                            ))
+                                        ) : (
+                                            <li className="times-li">No buses currently running</li>
+                                        )
+                                        ) : (
+                                        sortedTimes.map((time, index) => (
+                                            <li className={`times-li ${getMinsUntil(time) === "Left" ? 'left' : ''}`} key={index}>
+                                            <span className="time-text">{time}</span>
+                                            <span className="time-countdown">{getMinsUntil(time)}</span>
+                                            </li>
+                                        ))
+                                        )}
                                     </ul>
                                 )}
                             </div>
