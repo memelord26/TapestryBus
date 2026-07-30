@@ -29,6 +29,7 @@ header {
   background: #B4ADA5;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
   padding: 2rem 0;
+  position: relative;
 }
 
 .container {
@@ -141,7 +142,8 @@ header {
 
   .container .nav-link {
     flex-direction: column;
-    justify-content: space-evenly;
+    justify-content: flex-start;
+    gap: 1rem;
     background-color: #B4ADA5;
     position: absolute;
     width: 350px;
@@ -152,7 +154,7 @@ header {
   }
 
   .nav-link.active {
-    top: 15%;
+    top: 100%;
     transition: all 0.3s ease;
   }
 }
