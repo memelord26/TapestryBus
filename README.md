@@ -17,3 +17,7 @@ If you are developing a production application, we recommend using TypeScript wi
 
 ## Notes
 National Environment Agency. (2024). Relative Humidity across Singapore (2025) [Dataset] and 2-hour Weather Forecast (2025) [Dataset]. data.gov.sg. Retrieved January 14, 2026
+
+## Netlify Status
+
+[![Netlify Status](https://api.netlify.com/api/v1/badges/7ecaef6d-5880-4747-9d34-a0a4d578720a/deploy-status)](https://app.netlify.com/projects/tapestrybus/deploys)
